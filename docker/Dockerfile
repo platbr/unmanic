@@ -1,4 +1,4 @@
-FROM platbr/ffmpeg:hwaccel
+FROM josh5/base-alpine:3.10
 LABEL maintainer="Josh.5 <jsunnex@gmail.com>"
 
 
