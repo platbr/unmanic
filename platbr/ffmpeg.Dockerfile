@@ -30,11 +30,12 @@ RUN cd /build/ffmpeg-4* && \
     sed -i "s/Build-Depends:/Build-Depends:\n libstdc++-9-dev,\n libmfx-dev,\n nvidia-cuda-dev,/" debian/control
 
 RUN cd /build/ffmpeg-4* && dpkg-buildpackage -B
+RUN rm -f /build/*-extra*.deb
 
 FROM ubuntu:20.04
-COPY --from=builder /build/ffmpeg_4*.deb /tmp/
+COPY --from=builder /build/*.deb /tmp/
 # ARG LIBVA_DRIVER_NAME=iHD
 ENV DEBIAN_FRONTEND="noninteractive" 
-RUN apt-get update && apt-get install -y /tmp/ffmpeg_4*.deb && \
+RUN apt-get update && apt-get install -y /tmp/*.deb && \
     rm /tmp/*.deb && apt-get clean && \
     rm -rf /var/lib/apt/lists/*

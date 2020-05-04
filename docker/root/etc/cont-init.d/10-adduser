@@ -1,0 +1,39 @@
+#!/usr/bin/with-contenv bash
+
+PUID=${PUID:-1000}
+PGID=${PGID:-1000}
+
+
+user_config() {
+    groupadd -r docker && useradd -r -g docker docker
+    echo "**** [base-ubuntu] (user_config) Setting up user GID/UID ****";
+    groupmod -o -g "$PGID" docker;
+    usermod -o -u "$PUID" docker;
+    chown docker:docker /app;
+    chown docker:docker /config;
+    chown docker:docker /defaults;
+    echo "
+    -------------------------------------
+    User uid:    $(id -u docker)
+    User gid:    $(id -g docker)
+    -------------------------------------
+    ";
+}
+
+hosts_config() {
+    mkdir -p \
+        /config/etc;
+    if [[ ! -f /config/etc/hosts ]]; then
+        echo "**** [base-ubuntu] (hosts_config) Configuring hosts default file ****";
+        cat /etc/hosts > /config/etc/hosts;
+    fi
+    if [[ $(cmp -s /config/etc/hosts /etc/hosts || echo 1) ]]; then
+        echo "**** [base-ubuntu] (hosts_config) Updating hosts file ****";
+        cat /config/etc/hosts > /etc/hosts;
+    fi 
+    chown -R $PUID:$PGID \
+        /config/etc/hosts;
+}
+
+user_config;
+hosts_config;
