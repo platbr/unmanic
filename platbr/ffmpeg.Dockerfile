@@ -36,6 +36,6 @@ FROM ubuntu:20.04
 COPY --from=builder /build/*.deb /tmp/
 # ARG LIBVA_DRIVER_NAME=iHD
 ENV DEBIAN_FRONTEND="noninteractive" 
-RUN apt-get update && apt-get install -y /tmp/*.deb && \
+RUN apt-get update && apt-get install -y /tmp/*.deb intel-media-va-driver-non-free && \
     rm /tmp/*.deb && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
