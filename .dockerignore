@@ -6,7 +6,8 @@
 .gitattributes
 README.md
 platbr/*Dockerfile
-
+platbr/config
+platbr/.env
 config
 cache
 library

@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+  unmanic:
+    image: platbr/unmanic:latest
+    container_name: unmanic
+    ports:
+      - "9999:8888"
+    volumes:
+      - ${PWD}/unmanic/config:/config
+      - ${BASE_DIR}/media:/library
+    restart: unless-stopped
+    environment:
+      - PUID=501
+      - PGID=501
+      - TZ=America/Sao_Paulo
+      - DEBUGGING=true
+      - NUMBER_OF_WORKERS=2
+      - SCHEDULE_FULL_SCAN_MINUTES=20
+      - RUN_FULL_SCAN_ON_START=true
